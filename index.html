@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Developmental Editor</title>
 
-<!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -18,7 +17,7 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #fde2e4, #e3f2fd, #fff7d6, #f0fff4);
+    background: linear-gradient(135deg, #ffe5ec, #e0f4ff, #fff8d6, #edfdf2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,9 +26,9 @@ body {
 
 .container {
     width: 100%;
-    max-width: 950px;
+    max-width: 1000px;
     background: rgba(255,255,255,0.96);
-    border-radius: 22px;
+    border-radius: 24px;
     padding: 40px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.08);
 }
@@ -80,22 +79,22 @@ select:focus {
 }
 
 textarea {
-    resize: vertical;
     min-height: 130px;
+    resize: vertical;
 }
 
 .upload-box {
     border: 2px dashed #5a8dee;
     background: #f7fbff;
-    padding: 25px;
     border-radius: 14px;
+    padding: 25px;
     text-align: center;
 }
 
 .upload-box i {
     font-size: 30px;
     color: #5a8dee;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 button {
@@ -112,7 +111,7 @@ button {
 
 .result-box {
     margin-top: 35px;
-    padding: 28px;
+    padding: 30px;
     border-radius: 16px;
     background: #f8fff8;
     border-left: 6px solid #28a745;
@@ -120,14 +119,15 @@ button {
 }
 
 .result-box h2 {
-    margin-bottom: 18px;
     color: #1f7a34;
+    margin-bottom: 20px;
 }
 
 .section-title {
-    margin-top: 18px;
-    margin-bottom: 10px;
+    font-size: 18px;
     font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
     color: #222;
 }
 
@@ -137,7 +137,7 @@ ul {
 
 li {
     margin-bottom: 10px;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 </style>
 </head>
@@ -146,24 +146,26 @@ li {
 <div class="container">
 
     <h1><i class="fas fa-book-open"></i>AI Developmental Editor</h1>
-    <p class="subtitle">Deep Manuscript Analysis for Authors</p>
+    <p class="subtitle">
+        Full Manuscript Analysis + Genre + Character + Plot Development Feedback
+    </p>
 
     <form id="editorForm">
 
-        <!-- LOGIN -->
+        <!-- LOGIN SECTION -->
         <div class="form-group">
             <label>Author Name</label>
-            <input type="text" id="author" required>
+            <input type="text" id="author" placeholder="Enter your full name" required>
         </div>
 
         <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="email" required>
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
         </div>
 
         <!-- GENRE -->
         <div class="form-group">
-            <label>Genre</label>
+            <label>Select Genre</label>
             <select id="genre" required>
                 <option value="">Choose Genre</option>
                 <option>Fantasy</option>
@@ -179,23 +181,23 @@ li {
         <div class="form-group">
             <label>Main Character Details</label>
             <textarea id="character"
-            placeholder="Example: goal, fear, weakness, internal conflict, emotional arc, motivation..."></textarea>
+            placeholder="Example: protagonist is ambitious, has fear of abandonment, internal conflict, emotional arc..."></textarea>
         </div>
 
         <!-- PLOT -->
         <div class="form-group">
             <label>Plot Summary</label>
             <textarea id="plot"
-            placeholder="Beginning, conflict, midpoint, climax, ending..."></textarea>
+            placeholder="Beginning, betrayal, conflict, midpoint, climax, ending..."></textarea>
         </div>
 
-        <!-- FULL MANUSCRIPT UPLOAD -->
+        <!-- MANUSCRIPT UPLOAD -->
         <div class="form-group">
             <label>Upload Full Manuscript</label>
 
             <div class="upload-box">
                 <i class="fas fa-file-arrow-up"></i>
-                <p>Upload your manuscript (.txt for demo)</p>
+                <p>Upload manuscript (.txt for demo version)</p>
 
                 <input
                     type="file"
@@ -208,32 +210,32 @@ li {
 
         <!-- CHAPTER SAMPLE -->
         <div class="form-group">
-            <label>Paste Chapter Sample</label>
+            <label>Paste Important Chapter Sample</label>
             <textarea id="chapter"
-            placeholder="Paste one chapter or important scene here"></textarea>
+            placeholder="Paste a key chapter, emotional scene, confrontation, confession, climax scene..."></textarea>
         </div>
 
         <button type="submit">
-            Analyze Like a Developmental Editor
+            Analyze Manuscript
         </button>
 
     </form>
 
-    <!-- RESULT BOX -->
+    <!-- RESULTS -->
     <div class="result-box" id="resultBox">
 
         <h2>Developmental Editing Report</h2>
 
-        <div class="section-title">Story Structure</div>
+        <div class="section-title">Story Structure Analysis</div>
         <ul id="storyResult"></ul>
 
-        <div class="section-title">Character Development</div>
+        <div class="section-title">Character Development Analysis</div>
         <ul id="characterResult"></ul>
 
-        <div class="section-title">Genre Expectations</div>
+        <div class="section-title">Genre-Specific Editorial Feedback</div>
         <ul id="genreResult"></ul>
 
-        <div class="section-title">Reader Engagement</div>
+        <div class="section-title">Reader Engagement Analysis</div>
         <ul id="engagementResult"></ul>
 
     </div>
@@ -256,7 +258,7 @@ document.getElementById("editorForm").addEventListener("submit", function(e) {
     let engagementFeedback = [];
 
     if (!fileInput.files.length) {
-        alert("Please upload your manuscript.");
+        alert("Please upload your manuscript file.");
         return;
     }
 
@@ -264,104 +266,139 @@ document.getElementById("editorForm").addEventListener("submit", function(e) {
     const reader = new FileReader();
 
     reader.onload = function(event) {
-
         const manuscript = event.target.result.toLowerCase();
 
-        /* STORY ANALYSIS */
+        /* STORY STRUCTURE */
 
-        if (!plot.includes("conflict")) {
-            storyFeedback.push("Your central conflict is unclear. A strong visible problem must drive the plot.");
+        if (plot.includes("betrayal")) {
+            storyFeedback.push("Betrayal arc detected. Ensure this event permanently shifts trust and relationships.");
+        }
+
+        if (plot.includes("revenge")) {
+            storyFeedback.push("Revenge motivation detected. Clarify whether revenge heals or destroys your protagonist.");
+        }
+
+        if (plot.includes("war")) {
+            storyFeedback.push("Large external stakes found. Balance war with deeply personal emotional stakes.");
         }
 
         if (!plot.includes("climax")) {
-            storyFeedback.push("The climax feels weak or undefined. Readers expect a strong emotional or plot peak.");
+            storyFeedback.push("Climax is unclear. Every story needs one unforgettable emotional or plot peak.");
         }
 
         if (!plot.includes("ending")) {
-            storyFeedback.push("The ending is unclear. Resolution must feel earned and satisfying.");
+            storyFeedback.push("Ending feels undefined. Resolution must feel earned, not rushed.");
         }
 
-        if (manuscript.length < 5000) {
-            storyFeedback.push("The manuscript appears short for deep structural analysis. Expand emotional beats and scene depth.");
+        if (plot.length < 200) {
+            storyFeedback.push("Plot summary is too brief. Developmental editing requires clearer structural depth.");
         }
 
-        if (!manuscript.includes("chapter")) {
-            storyFeedback.push("Chapter segmentation seems unclear. Distinct chapter progression improves pacing.");
+        /* CHARACTER DEVELOPMENT */
+
+        if (character.includes("orphan")) {
+            characterFeedback.push("Orphan backstory detected. Avoid using tragedy only as decoration—show how it shapes choices.");
         }
 
-        /* CHARACTER ANALYSIS */
+        if (character.includes("ambitious")) {
+            characterFeedback.push("Ambitious protagonist detected. Show what success costs emotionally.");
+        }
+
+        if (character.includes("cold")) {
+            characterFeedback.push("Emotionally distant lead detected. Readers need emotional cracks to connect.");
+        }
+
+        if (character.includes("fear of abandonment")) {
+            characterFeedback.push("Excellent emotional wound detected. Tie this fear directly to major relationship decisions.");
+        }
 
         if (!character.includes("goal")) {
-            characterFeedback.push("Your protagonist lacks a strong goal. Desire drives reader investment.");
+            characterFeedback.push("Your protagonist lacks a clear goal. Desire is the engine of reader investment.");
         }
 
         if (!character.includes("fear")) {
-            characterFeedback.push("Missing emotional vulnerability. Fear makes characters realistic.");
-        }
-
-        if (!character.includes("conflict")) {
-            characterFeedback.push("Internal conflict is missing. Character tension often matters more than plot tension.");
+            characterFeedback.push("Missing vulnerability. Fear creates realism and emotional tension.");
         }
 
         if (!character.includes("change")) {
-            characterFeedback.push("Character arc feels static. Readers need visible transformation.");
+            characterFeedback.push("Character transformation feels weak. Readers expect visible emotional growth.");
         }
 
-        if (!manuscript.includes("because")) {
-            characterFeedback.push("Character motivations feel weak. Cause-and-effect decisions need clarity.");
-        }
-
-        /* GENRE ANALYSIS */
+        /* GENRE FEEDBACK */
 
         if (genre === "fantasy") {
-            genreFeedback.push("Strengthen world-building, kingdom rules, and consequences of magic.");
+            genreFeedback.push("Fantasy requires world rules. Strengthen political systems, power imbalance, and consequences of magic.");
+
+            if (plot.includes("kingdom")) {
+                genreFeedback.push("Kingdom setting detected. Strengthen succession politics and throne-related tension.");
+            }
+
+            if (plot.includes("magic")) {
+                genreFeedback.push("Magic system detected. Readers need rules, limits, and consequences.");
+            }
         }
 
         if (genre === "romance") {
-            genreFeedback.push("Build stronger chemistry, longing, and emotional resistance between leads.");
+            genreFeedback.push("Romance requires longing, resistance, and emotional payoff—not just attraction.");
+
+            if (plot.includes("enemies to lovers")) {
+                genreFeedback.push("Enemies-to-lovers trope detected. Emotional resistance must feel justified.");
+            }
+
+            if (plot.includes("forbidden love")) {
+                genreFeedback.push("Forbidden love detected. Strengthen real consequences of choosing love.");
+            }
         }
 
         if (genre === "thriller") {
-            genreFeedback.push("Increase urgency and stakes. Ask what becomes worse if the protagonist fails.");
+            genreFeedback.push("Thrillers need escalating danger. Ask what gets worse every chapter.");
+
+            if (plot.includes("serial killer")) {
+                genreFeedback.push("Villain detected. Make them psychologically memorable, not just dangerous.");
+            }
         }
 
         if (genre === "mystery") {
-            genreFeedback.push("Add layered clues, suspicion, and stronger reveal pacing.");
+            genreFeedback.push("Mystery readers expect layered clues, red herrings, and satisfying reveals.");
         }
 
         if (genre === "drama") {
-            genreFeedback.push("Push characters into harder emotional confrontations and moral choices.");
+            genreFeedback.push("Drama thrives on emotional confrontation. Push characters toward impossible choices.");
         }
 
         if (genre === "poetry") {
-            genreFeedback.push("Strengthen imagery, metaphor depth, and unforgettable ending lines.");
+            genreFeedback.push("Poetry depends on emotional resonance. Strengthen imagery and unforgettable endings.");
         }
 
         /* READER ENGAGEMENT */
 
-        if (chapter.length < 300) {
-            engagementFeedback.push("Your chapter sample feels short. Reader immersion needs stronger scene depth.");
+        if (chapter.includes('"') || chapter.includes("'")) {
+            engagementFeedback.push("Dialogue detected. Ensure every conversation changes power, emotion, or knowledge.");
+        } else {
+            engagementFeedback.push("Dialogue seems limited. Dialogue improves pacing and emotional attachment.");
         }
 
-        if (!chapter.includes('"') && !chapter.includes("'")) {
-            engagementFeedback.push("Dialogue seems limited. Strong dialogue improves pace and emotional attachment.");
+        if (chapter.includes("kiss")) {
+            engagementFeedback.push("Romantic turning point detected. Emotional buildup must match the payoff.");
         }
 
-        if (!chapter.includes("suddenly")) {
-            engagementFeedback.push("Scene momentum feels slow. Add stronger turning points inside scenes.");
+        if (chapter.includes("death")) {
+            engagementFeedback.push("Major emotional loss detected. Slow down the emotional aftermath—grief needs space.");
         }
 
-        if (
-            manuscript.includes("then") &&
-            manuscript.includes("after that") &&
-            manuscript.includes("suddenly")
-        ) {
-            engagementFeedback.push("Scene transitions rely too much on progression words. Improve emotional transitions.");
+        if (chapter.includes("silence")) {
+            engagementFeedback.push("Silence/subtext detected. Use what characters avoid saying to increase tension.");
         }
 
-        if (chapter.length > 300) {
-            engagementFeedback.push("Strong chapter depth detected. Focus next on sharper pacing and scene transitions.");
+        if (chapter.length < 400) {
+            engagementFeedback.push("Scene depth feels limited. Add sensory details, internal thought, and emotional layering.");
         }
+
+        if (manuscript.length > 10000) {
+            engagementFeedback.push("Strong manuscript depth detected. Focus next on pacing consistency across chapters.");
+        }
+
+        /* DISPLAY RESULTS */
 
         function display(id, data) {
             const target = document.getElementById(id);
