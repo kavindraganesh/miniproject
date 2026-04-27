@@ -1,10 +1,13 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Developmental Editor</title>
+  <title>AI Manuscript Analyzer</title>
+
+  <!-- Font Awesome for book/reading icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     * {
       margin: 0;
@@ -14,37 +17,73 @@
     }
 
     body {
-      background: #f4f7fa;
+      min-height: 100vh;
+      padding: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 20px;
+
+      /* Pastel Gradient Background */
+      background: linear-gradient(
+        135deg,
+        #fcefee,
+        #f7f3ff,
+        #eef9ff,
+        #fff9e8
+      );
+      background-size: cover;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    /* Floating reading symbols */
+    .icon {
+      position: absolute;
+      font-size: 28px;
+      color: rgba(74, 144, 226, 0.18);
+      z-index: 0;
+    }
+
+    .icon1 { top: 8%; left: 8%; }
+    .icon2 { top: 15%; right: 10%; }
+    .icon3 { bottom: 12%; left: 10%; }
+    .icon4 { bottom: 18%; right: 8%; }
+    .icon5 { top: 45%; left: 4%; }
+    .icon6 { top: 55%; right: 5%; }
 
     .container {
       width: 100%;
-      max-width: 700px;
-      background: white;
+      max-width: 750px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
       padding: 35px;
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+      position: relative;
+      z-index: 2;
     }
 
     h1 {
       text-align: center;
       margin-bottom: 10px;
-      color: #222;
+      color: #2d2d2d;
+      font-size: 30px;
     }
 
-    p {
+    .title-icon {
+      color: #4a90e2;
+      margin-right: 8px;
+    }
+
+    .subtitle {
       text-align: center;
       margin-bottom: 30px;
       color: #666;
+      font-size: 15px;
     }
 
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     label {
@@ -59,17 +98,19 @@
     select {
       width: 100%;
       padding: 14px;
-      border: 1px solid #dcdcdc;
-      border-radius: 8px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
       font-size: 15px;
       outline: none;
       transition: 0.3s;
+      background: #fff;
     }
 
     input:focus,
     textarea:focus,
     select:focus {
       border-color: #4a90e2;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.08);
     }
 
     textarea {
@@ -78,25 +119,36 @@
     }
 
     .upload-box {
-      border: 2px dashed #4a90e2;
+      border: 2px dashed #7fb3ff;
       padding: 25px;
       text-align: center;
-      border-radius: 10px;
-      background: #f9fcff;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+
+    .upload-box i {
+      font-size: 28px;
+      color: #4a90e2;
+      margin-bottom: 10px;
+    }
+
+    .upload-box p {
+      margin-bottom: 10px;
+      color: #555;
     }
 
     .upload-box input {
       border: none;
-      margin-top: 10px;
+      background: transparent;
     }
 
     button {
       width: 100%;
       padding: 15px;
-      background: #4a90e2;
+      background: linear-gradient(to right, #4a90e2, #6fa8ff);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
       cursor: pointer;
       font-weight: bold;
@@ -104,15 +156,31 @@
     }
 
     button:hover {
-      background: #357bd8;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(74, 144, 226, 0.15);
     }
   </style>
 </head>
 <body>
 
+  <!-- Decorative Reading Symbols -->
+  <i class="fas fa-book-open icon icon1"></i>
+  <i class="fas fa-feather-pointed icon icon2"></i>
+  <i class="fas fa-book icon icon3"></i>
+  <i class="fas fa-pen-nib icon icon4"></i>
+  <i class="fas fa-scroll icon icon5"></i>
+  <i class="fas fa-bookmark icon icon6"></i>
+
   <div class="container">
-    <h1>AI Manuscript Analyzer</h1>
-    <p>Developmental Editing & Manuscript Analysis System</p>
+
+    <h1>
+      <i class="fas fa-book-open title-icon"></i>
+      AI Manuscript Analyzer
+    </h1>
+
+    <p class="subtitle">
+      Developmental Editing & Manuscript Analysis System
+    </p>
 
     <form>
 
@@ -132,10 +200,11 @@
         <input type="password" placeholder="Enter your password" required>
       </div>
 
-      <!-- Manuscript Upload -->
+      <!-- Upload -->
       <div class="form-group">
         <label>Upload Manuscript</label>
         <div class="upload-box">
+          <i class="fas fa-file-arrow-up"></i>
           <p>Upload your manuscript (.doc, .docx, .pdf)</p>
           <input type="file" accept=".doc,.docx,.pdf">
         </div>
@@ -162,27 +231,27 @@
       <!-- Character Details -->
       <div class="form-group">
         <label>Main Character Details</label>
-        <textarea placeholder="Enter character names, personality, role, emotional arc, conflicts, motivations, etc."></textarea>
+        <textarea placeholder="Enter character names, personality, emotional arc, motivations, conflicts, etc."></textarea>
       </div>
 
       <!-- Plot Summary -->
       <div class="form-group">
         <label>Plot Summary</label>
-        <textarea placeholder="Briefly explain your story plot, major conflicts, twists, and ending"></textarea>
+        <textarea placeholder="Briefly explain your story plot, twists, major conflicts, and ending"></textarea>
       </div>
 
-      <!-- Writing Goals -->
+      <!-- AI Analysis -->
       <div class="form-group">
-        <label>What do you want AI to analyze?</label>
+        <label>What should AI analyze?</label>
         <textarea placeholder="Example: plot holes, pacing issues, emotional depth, dialogue weakness, character inconsistency"></textarea>
       </div>
 
-      <button type="submit">Analyze Manuscript</button>
+      <button type="submit">
+        Analyze Manuscript
+      </button>
 
     </form>
   </div>
 
 </body>
 </html>
-```
-
