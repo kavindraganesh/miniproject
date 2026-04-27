@@ -1,257 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Manuscript Analyzer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Developmental Editor</title>
 
-  <!-- Font Awesome for book/reading icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
 
-    body {
-      min-height: 100vh;
-      padding: 30px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fde2e4, #e3f2fd, #fff7d6, #f0fff4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
 
-      /* Pastel Gradient Background */
-      background: linear-gradient(
-        135deg,
-        #fcefee,
-        #f7f3ff,
-        #eef9ff,
-        #fff9e8
-      );
-      background-size: cover;
-      position: relative;
-      overflow-x: hidden;
-    }
+.container {
+    width: 100%;
+    max-width: 950px;
+    background: rgba(255,255,255,0.96);
+    border-radius: 22px;
+    padding: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
 
-    /* Floating reading symbols */
-    .icon {
-      position: absolute;
-      font-size: 28px;
-      color: rgba(74, 144, 226, 0.18);
-      z-index: 0;
-    }
+h1 {
+    text-align: center;
+    color: #2d2d2d;
+    margin-bottom: 10px;
+}
 
-    .icon1 { top: 8%; left: 8%; }
-    .icon2 { top: 15%; right: 10%; }
-    .icon3 { bottom: 12%; left: 10%; }
-    .icon4 { bottom: 18%; right: 8%; }
-    .icon5 { top: 45%; left: 4%; }
-    .icon6 { top: 55%; right: 5%; }
+h1 i {
+    color: #5a8dee;
+    margin-right: 8px;
+}
 
-    .container {
-      width: 100%;
-      max-width: 750px;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(10px);
-      padding: 35px;
-      border-radius: 18px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-      position: relative;
-      z-index: 2;
-    }
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-      color: #2d2d2d;
-      font-size: 30px;
-    }
+.form-group {
+    margin-bottom: 22px;
+}
 
-    .title-icon {
-      color: #4a90e2;
-      margin-right: 8px;
-    }
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
 
-    .subtitle {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #666;
-      font-size: 15px;
-    }
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 15px;
+}
 
-    .form-group {
-      margin-bottom: 22px;
-    }
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #5a8dee;
+}
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #333;
-    }
+textarea {
+    resize: vertical;
+    min-height: 130px;
+}
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 15px;
-      outline: none;
-      transition: 0.3s;
-      background: #fff;
-    }
+.upload-box {
+    border: 2px dashed #5a8dee;
+    background: #f7fbff;
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+}
 
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: #4a90e2;
-      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.08);
-    }
+.upload-box i {
+    font-size: 30px;
+    color: #5a8dee;
+    margin-bottom: 12px;
+}
 
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
+button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(to right, #5a8dee, #7b61ff);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-    .upload-box {
-      border: 2px dashed #7fb3ff;
-      padding: 25px;
-      text-align: center;
-      border-radius: 12px;
-      background: #f8fbff;
-    }
+.result-box {
+    margin-top: 35px;
+    padding: 28px;
+    border-radius: 16px;
+    background: #f8fff8;
+    border-left: 6px solid #28a745;
+    display: none;
+}
 
-    .upload-box i {
-      font-size: 28px;
-      color: #4a90e2;
-      margin-bottom: 10px;
-    }
+.result-box h2 {
+    margin-bottom: 18px;
+    color: #1f7a34;
+}
 
-    .upload-box p {
-      margin-bottom: 10px;
-      color: #555;
-    }
+.section-title {
+    margin-top: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #222;
+}
 
-    .upload-box input {
-      border: none;
-      background: transparent;
-    }
+ul {
+    padding-left: 20px;
+}
 
-    button {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(to right, #4a90e2, #6fa8ff);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(74, 144, 226, 0.15);
-    }
-  </style>
+li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+</style>
 </head>
 <body>
 
-  <!-- Decorative Reading Symbols -->
-  <i class="fas fa-book-open icon icon1"></i>
-  <i class="fas fa-feather-pointed icon icon2"></i>
-  <i class="fas fa-book icon icon3"></i>
-  <i class="fas fa-pen-nib icon icon4"></i>
-  <i class="fas fa-scroll icon icon5"></i>
-  <i class="fas fa-bookmark icon icon6"></i>
+<div class="container">
 
-  <div class="container">
+    <h1><i class="fas fa-book-open"></i>AI Developmental Editor</h1>
+    <p class="subtitle">Deep Manuscript Analysis for Authors</p>
 
-    <h1>
-      <i class="fas fa-book-open title-icon"></i>
-      AI Manuscript Analyzer
-    </h1>
+    <form id="editorForm">
 
-    <p class="subtitle">
-      Developmental Editing & Manuscript Analysis System
-    </p>
-
-    <form>
-
-      <!-- Login Section -->
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" placeholder="Enter your full name" required>
-      </div>
-
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" placeholder="Enter your email" required>
-      </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" placeholder="Enter your password" required>
-      </div>
-
-      <!-- Upload -->
-      <div class="form-group">
-        <label>Upload Manuscript</label>
-        <div class="upload-box">
-          <i class="fas fa-file-arrow-up"></i>
-          <p>Upload your manuscript (.doc, .docx, .pdf)</p>
-          <input type="file" accept=".doc,.docx,.pdf">
+        <!-- LOGIN -->
+        <div class="form-group">
+            <label>Author Name</label>
+            <input type="text" id="author" required>
         </div>
-      </div>
 
-      <!-- Genre -->
-      <div class="form-group">
-        <label>Select Genre</label>
-        <select required>
-          <option value="">Choose Genre</option>
-          <option>Fantasy</option>
-          <option>Romance</option>
-          <option>Thriller</option>
-          <option>Mystery</option>
-          <option>Historical Fiction</option>
-          <option>Young Adult</option>
-          <option>Science Fiction</option>
-          <option>Horror</option>
-          <option>Poetry</option>
-          <option>Drama</option>
-        </select>
-      </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" required>
+        </div>
 
-      <!-- Character Details -->
-      <div class="form-group">
-        <label>Main Character Details</label>
-        <textarea placeholder="Enter character names, personality, emotional arc, motivations, conflicts, etc."></textarea>
-      </div>
+        <!-- GENRE -->
+        <div class="form-group">
+            <label>Genre</label>
+            <select id="genre" required>
+                <option value="">Choose Genre</option>
+                <option>Fantasy</option>
+                <option>Romance</option>
+                <option>Thriller</option>
+                <option>Mystery</option>
+                <option>Drama</option>
+                <option>Poetry</option>
+            </select>
+        </div>
 
-      <!-- Plot Summary -->
-      <div class="form-group">
-        <label>Plot Summary</label>
-        <textarea placeholder="Briefly explain your story plot, twists, major conflicts, and ending"></textarea>
-      </div>
+        <!-- CHARACTER -->
+        <div class="form-group">
+            <label>Main Character Details</label>
+            <textarea id="character"
+            placeholder="Example: goal, fear, weakness, internal conflict, emotional arc, motivation..."></textarea>
+        </div>
 
-      <!-- AI Analysis -->
-      <div class="form-group">
-        <label>What should AI analyze?</label>
-        <textarea placeholder="Example: plot holes, pacing issues, emotional depth, dialogue weakness, character inconsistency"></textarea>
-      </div>
+        <!-- PLOT -->
+        <div class="form-group">
+            <label>Plot Summary</label>
+            <textarea id="plot"
+            placeholder="Beginning, conflict, midpoint, climax, ending..."></textarea>
+        </div>
 
-      <button type="submit">
-        Analyze Manuscript
-      </button>
+        <!-- FULL MANUSCRIPT UPLOAD -->
+        <div class="form-group">
+            <label>Upload Full Manuscript</label>
+
+            <div class="upload-box">
+                <i class="fas fa-file-arrow-up"></i>
+                <p>Upload your manuscript (.txt for demo)</p>
+
+                <input
+                    type="file"
+                    id="manuscriptFile"
+                    accept=".txt"
+                    required
+                >
+            </div>
+        </div>
+
+        <!-- CHAPTER SAMPLE -->
+        <div class="form-group">
+            <label>Paste Chapter Sample</label>
+            <textarea id="chapter"
+            placeholder="Paste one chapter or important scene here"></textarea>
+        </div>
+
+        <button type="submit">
+            Analyze Like a Developmental Editor
+        </button>
 
     </form>
-  </div>
+
+    <!-- RESULT BOX -->
+    <div class="result-box" id="resultBox">
+
+        <h2>Developmental Editing Report</h2>
+
+        <div class="section-title">Story Structure</div>
+        <ul id="storyResult"></ul>
+
+        <div class="section-title">Character Development</div>
+        <ul id="characterResult"></ul>
+
+        <div class="section-title">Genre Expectations</div>
+        <ul id="genreResult"></ul>
+
+        <div class="section-title">Reader Engagement</div>
+        <ul id="engagementResult"></ul>
+
+    </div>
+
+</div>
+
+<script>
+document.getElementById("editorForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const genre = document.getElementById("genre").value.toLowerCase();
+    const character = document.getElementById("character").value.toLowerCase();
+    const plot = document.getElementById("plot").value.toLowerCase();
+    const chapter = document.getElementById("chapter").value.toLowerCase();
+    const fileInput = document.getElementById("manuscriptFile");
+
+    let storyFeedback = [];
+    let characterFeedback = [];
+    let genreFeedback = [];
+    let engagementFeedback = [];
+
+    if (!fileInput.files.length) {
+        alert("Please upload your manuscript.");
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+
+        const manuscript = event.target.result.toLowerCase();
+
+        /* STORY ANALYSIS */
+
+        if (!plot.includes("conflict")) {
+            storyFeedback.push("Your central conflict is unclear. A strong visible problem must drive the plot.");
+        }
+
+        if (!plot.includes("climax")) {
+            storyFeedback.push("The climax feels weak or undefined. Readers expect a strong emotional or plot peak.");
+        }
+
+        if (!plot.includes("ending")) {
+            storyFeedback.push("The ending is unclear. Resolution must feel earned and satisfying.");
+        }
+
+        if (manuscript.length < 5000) {
+            storyFeedback.push("The manuscript appears short for deep structural analysis. Expand emotional beats and scene depth.");
+        }
+
+        if (!manuscript.includes("chapter")) {
+            storyFeedback.push("Chapter segmentation seems unclear. Distinct chapter progression improves pacing.");
+        }
+
+        /* CHARACTER ANALYSIS */
+
+        if (!character.includes("goal")) {
+            characterFeedback.push("Your protagonist lacks a strong goal. Desire drives reader investment.");
+        }
+
+        if (!character.includes("fear")) {
+            characterFeedback.push("Missing emotional vulnerability. Fear makes characters realistic.");
+        }
+
+        if (!character.includes("conflict")) {
+            characterFeedback.push("Internal conflict is missing. Character tension often matters more than plot tension.");
+        }
+
+        if (!character.includes("change")) {
+            characterFeedback.push("Character arc feels static. Readers need visible transformation.");
+        }
+
+        if (!manuscript.includes("because")) {
+            characterFeedback.push("Character motivations feel weak. Cause-and-effect decisions need clarity.");
+        }
+
+        /* GENRE ANALYSIS */
+
+        if (genre === "fantasy") {
+            genreFeedback.push("Strengthen world-building, kingdom rules, and consequences of magic.");
+        }
+
+        if (genre === "romance") {
+            genreFeedback.push("Build stronger chemistry, longing, and emotional resistance between leads.");
+        }
+
+        if (genre === "thriller") {
+            genreFeedback.push("Increase urgency and stakes. Ask what becomes worse if the protagonist fails.");
+        }
+
+        if (genre === "mystery") {
+            genreFeedback.push("Add layered clues, suspicion, and stronger reveal pacing.");
+        }
+
+        if (genre === "drama") {
+            genreFeedback.push("Push characters into harder emotional confrontations and moral choices.");
+        }
+
+        if (genre === "poetry") {
+            genreFeedback.push("Strengthen imagery, metaphor depth, and unforgettable ending lines.");
+        }
+
+        /* READER ENGAGEMENT */
+
+        if (chapter.length < 300) {
+            engagementFeedback.push("Your chapter sample feels short. Reader immersion needs stronger scene depth.");
+        }
+
+        if (!chapter.includes('"') && !chapter.includes("'")) {
+            engagementFeedback.push("Dialogue seems limited. Strong dialogue improves pace and emotional attachment.");
+        }
+
+        if (!chapter.includes("suddenly")) {
+            engagementFeedback.push("Scene momentum feels slow. Add stronger turning points inside scenes.");
+        }
+
+        if (
+            manuscript.includes("then") &&
+            manuscript.includes("after that") &&
+            manuscript.includes("suddenly")
+        ) {
+            engagementFeedback.push("Scene transitions rely too much on progression words. Improve emotional transitions.");
+        }
+
+        if (chapter.length > 300) {
+            engagementFeedback.push("Strong chapter depth detected. Focus next on sharper pacing and scene transitions.");
+        }
+
+        function display(id, data) {
+            const target = document.getElementById(id);
+            target.innerHTML = "";
+
+            if (data.length === 0) {
+                target.innerHTML = "<li>Strong foundation detected in this section.</li>";
+            } else {
+                data.forEach(item => {
+                    const li = document.createElement("li");
+                    li.textContent = item;
+                    target.appendChild(li);
+                });
+            }
+        }
+
+        display("storyResult", storyFeedback);
+        display("characterResult", characterFeedback);
+        display("genreResult", genreFeedback);
+        display("engagementResult", engagementFeedback);
+
+        document.getElementById("resultBox").style.display = "block";
+
+        document.getElementById("resultBox").scrollIntoView({
+            behavior: "smooth"
+        });
+    };
+
+    reader.readAsText(file);
+});
+</script>
 
 </body>
 </html>
